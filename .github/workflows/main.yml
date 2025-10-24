@@ -23,10 +23,15 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Run tests
+        run: flutter test
+
       - name: Build Flutter web with correct base href
+        if: success()
         run: flutter build web --release --base-href /freestylebattle/
 
       - name: Deploy to GitHub Pages
+        if: success()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
