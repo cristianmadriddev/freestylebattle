@@ -1,0 +1,73 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-bff:
+    name: Build & Test BFF
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./bff
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build BFF
+        run: npm run build
+
+      # Optional: deploy your BFF (Fly.io / Render / Railway)
+      # - name: Deploy BFF
+      #   run: fly deploy --remote-only
+
+  build-app:
+    name: Build & Deploy Flutter Web
+    runs-on: ubuntu-latest
+    needs: build-bff
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build Flutter web with correct base href
+        run: flutter build web --release --base-href /freestylebattle/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: success()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./app/build/web
+          publish_branch: gh-pages
