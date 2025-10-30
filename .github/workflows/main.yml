@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -12,11 +14,16 @@ permissions:
 
 jobs:
   build:
+    name: Build & Deploy Flutter Web
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
     steps:
       - uses: actions/checkout@v3
 
-      - uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
 
@@ -27,13 +34,11 @@ jobs:
         run: flutter test
 
       - name: Build Flutter web with correct base href
-        if: success()
         run: flutter build web --release --base-href /freestylebattle/
 
       - name: Deploy to GitHub Pages
-        if: success()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
+          publish_dir: ./app/build/web
           publish_branch: gh-pages
