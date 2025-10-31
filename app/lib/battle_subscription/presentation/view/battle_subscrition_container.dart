@@ -4,6 +4,7 @@ import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_sub
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_event.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_state.dart';
 import 'package:freestylebattle/timer/timer.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BattleSubscriptionContainer extends StatefulWidget {
   const BattleSubscriptionContainer({super.key});
@@ -234,19 +235,16 @@ class _BattleSubscriptionContainerState
                         battles[_currentBattleIndex].$1,
                         maxLines: 1,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: GoogleFonts.bungeeSpice(
                           fontSize: 44,
-                          fontWeight: FontWeight.bold,
-
                           color: colorScheme.onSurface,
                         ),
                       ),
                       Text(
                         'VS',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: GoogleFonts.butterflyKids(
                           fontSize: 22,
-                          fontWeight: FontWeight.bold,
                           color: colorScheme.error,
                         ),
                       ),
@@ -254,9 +252,8 @@ class _BattleSubscriptionContainerState
                         battles[_currentBattleIndex].$2,
                         textAlign: TextAlign.center,
                         maxLines: 2,
-                        style: TextStyle(
+                        style: GoogleFonts.bungeeSpice(
                           fontSize: 44,
-                          fontWeight: FontWeight.bold,
                           color: colorScheme.onSurface,
                         ),
                       ),

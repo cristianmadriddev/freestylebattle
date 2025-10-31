@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freestylebattle/battle/presentation/view/battle_page.dart';
 
@@ -14,15 +15,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     return MaterialApp(
       title: 'Flutter',
       theme: ThemeData(
         brightness: Brightness.dark,
         colorScheme: const ColorScheme(
           brightness: Brightness.dark,
-          primary: Color(0xFFFFD700), // amarelo
+          primary: Color(0xFFFFD700),
           onPrimary: Colors.black,
-          secondary: Color(0xFFFF5252), // vermelho
+          secondary: Color(0xFFFF5252),
           onSecondary: Colors.white,
           surface: Color(0xFF121212),
           onSurface: Colors.white,
