@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_event.dart';
-import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_state.dart';
 import 'package:freestylebattle/timer/timer.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../bloc/battle_subscription_state.dart';
 
 class BattleSubscriptionContainer extends StatefulWidget {
   const BattleSubscriptionContainer({super.key});
@@ -18,38 +19,10 @@ class _BattleSubscriptionContainerState
     extends State<BattleSubscriptionContainer> {
   final TextEditingController _nameController = TextEditingController();
   int _currentBattleIndex = 0;
+  bool _showMatches = false;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        children: [
-          TabBar(
-            labelColor: colorScheme.primary,
-            unselectedLabelColor: colorScheme.outline,
-            indicatorColor: colorScheme.primary,
-            tabs: const [
-              Tab(icon: Icon(Icons.people_alt_outlined), text: 'Inscrições'),
-              Tab(icon: Icon(Icons.sports_martial_arts), text: 'Chaveamentos'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                _buildParticipantsTab(context),
-                _buildBattlesTab(context),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildParticipantsTab(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
@@ -57,6 +30,133 @@ class _BattleSubscriptionContainerState
       child: BlocBuilder<BattleSubscriptionBloc, BattleSubscriptionState>(
         builder: (context, state) {
           final bloc = context.read<BattleSubscriptionBloc>();
+
+          if (_showMatches) {
+            final battles = state.subscriptions;
+
+            if (battles.isEmpty) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() => _showMatches = false);
+              });
+              return const SizedBox();
+            }
+
+            if (_currentBattleIndex >= battles.length) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      size: 64,
+                      color: colorScheme.primary,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Todas as batalhas foram exibidas 🏁',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _showMatches = false;
+                          _currentBattleIndex = 0;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                      ),
+                      child: const Text('Voltar para inscrições'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: _currentBattleIndex > 0
+                            ? () => setState(() => _currentBattleIndex--)
+                            : null,
+                        icon: Icon(
+                          Icons.skip_previous,
+                          size: 36,
+                          color: _currentBattleIndex > 0
+                              ? colorScheme.primary
+                              : colorScheme.outline.withOpacity(0.5),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              battles[_currentBattleIndex].$1,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.bungeeSpice(
+                                fontSize: 44,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'VS',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.butterflyKids(
+                                fontSize: 22,
+                                color: colorScheme.error,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              battles[_currentBattleIndex].$2,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              style: GoogleFonts.bungeeSpice(
+                                fontSize: 44,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: _currentBattleIndex < battles.length - 1
+                            ? () => setState(() => _currentBattleIndex++)
+                            : null,
+                        icon: Icon(
+                          Icons.skip_next,
+                          size: 36,
+                          color: _currentBattleIndex < battles.length - 1
+                              ? colorScheme.primary
+                              : colorScheme.outline.withOpacity(0.5),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ),
+                TimerCard(),
+                const SizedBox(height: 24),
+              ],
+            );
+          }
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,6 +193,14 @@ class _BattleSubscriptionContainerState
                         ? () => _addName(bloc)
                         : null,
                     icon: const Icon(Icons.add),
+                    style: IconButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.all(16),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      shape: const CircleBorder(),
+                    ),
                   ),
                 ],
               ),
@@ -102,7 +210,7 @@ class _BattleSubscriptionContainerState
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Nenhum inscrito ainda 👀',
+                      'Adicione as inscrições',
                       style: TextStyle(color: colorScheme.error, fontSize: 24),
                     ),
                   ),
@@ -111,13 +219,13 @@ class _BattleSubscriptionContainerState
                 Expanded(
                   child: ListView.separated(
                     itemCount: state.names.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, index) =>
                         Divider(color: colorScheme.outline),
                     itemBuilder: (context, index) {
                       final name = state.names[index];
                       return ListTile(
                         title: Text(
-                          name,
+                          '${index + 1}. $name',
                           style: TextStyle(color: colorScheme.onSurface),
                         ),
                         trailing: IconButton(
@@ -136,171 +244,31 @@ class _BattleSubscriptionContainerState
 
               const SizedBox(height: 20),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed:
-                          (state.names.length >= 2 &&
-                              state.subscriptions.isEmpty)
-                          ? () {
-                              bloc.add(BattleSubscritionGenerateEvent());
-                              DefaultTabController.of(context).animateTo(1);
-                            }
-                          : null,
-                      icon: const Icon(Icons.shuffle),
-                      label: const Text('Gerar Chaves'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
-                        padding: const EdgeInsets.all(24),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed:
-                          (state.names.isNotEmpty ||
-                              state.subscriptions.isNotEmpty)
-                          ? () {
-                              bloc.add(BattleSubscriptionClearAllEvent());
-                              DefaultTabController.of(context).animateTo(0);
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.secondary,
-                        foregroundColor: colorScheme.onSecondary,
-                        padding: const EdgeInsets.all(24),
-                      ),
-                      icon: const Icon(Icons.delete_sweep),
-                      label: const Text('Limpar tudo'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildBattlesTab(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: BlocConsumer<BattleSubscriptionBloc, BattleSubscriptionState>(
-        listener: (context, state) {
-          if (state.subscriptions.isNotEmpty) {
-            setState(() => _currentBattleIndex = 0);
-          }
-        },
-        builder: (context, state) {
-          if (state.subscriptions.isEmpty) {
-            return Center(
-              child: Text(
-                'Kd as inscrições fml?!',
-                style: TextStyle(color: colorScheme.outline, fontSize: 24),
-              ),
-            );
-          }
-
-          final battles = state.subscriptions;
-
-          if (_currentBattleIndex >= battles.length) {
-            return Center(
-              child: Text(
-                'Todas as batalhas foram exibidas 🏁',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onSurface,
+              ElevatedButton.icon(
+                onPressed:
+                    (state.names.length >= 2 && state.subscriptions.isEmpty)
+                    ? () {
+                        bloc.add(BattleSubscritionGenerateEvent());
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (context
+                              .read<BattleSubscriptionBloc>()
+                              .state
+                              .subscriptions
+                              .isNotEmpty) {
+                            setState(() => _showMatches = true);
+                          }
+                        });
+                      }
+                    : null,
+                icon: const Icon(Icons.shuffle),
+                label: const Text('Gerar Chaves'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                  padding: const EdgeInsets.all(20),
+                  textStyle: const TextStyle(fontSize: 18),
                 ),
               ),
-            );
-          }
-
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 24),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      Text(
-                        battles[_currentBattleIndex].$1,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.bungeeSpice(
-                          fontSize: 44,
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                      Text(
-                        'VS',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.butterflyKids(
-                          fontSize: 22,
-                          color: colorScheme.error,
-                        ),
-                      ),
-                      Text(
-                        battles[_currentBattleIndex].$2,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        style: GoogleFonts.bungeeSpice(
-                          fontSize: 44,
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              TimerCard(),
-              const SizedBox(height: 44),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: _currentBattleIndex > 0
-                        ? () {
-                            setState(() {
-                              _currentBattleIndex--;
-                            });
-                          }
-                        : null,
-                    icon: const Icon(Icons.navigate_before),
-                    label: const Text('Chave anterior'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      padding: const EdgeInsets.all(24),
-                    ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: _currentBattleIndex < battles.length - 1
-                        ? () {
-                            setState(() {
-                              _currentBattleIndex++;
-                            });
-                          }
-                        : null,
-                    icon: const Icon(Icons.navigate_next),
-                    label: const Text('Próxima chave'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      padding: const EdgeInsets.all(24),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
             ],
           );
         },

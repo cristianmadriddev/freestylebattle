@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_event.dart';
+import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_state.dart';
 import '../../battle.dart';
 
 class BattlePage extends StatelessWidget {
@@ -6,12 +9,45 @@ class BattlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Grita: Hip Hop!'),
-        backgroundColor: Colors.transparent,
-      ),
-      body: Column(children: [Expanded(child: BattleSubscriptionContainer())]),
+    return BlocBuilder<BattleSubscriptionBloc, BattleSubscriptionState>(
+      builder: (_, state) {
+        final bloc = context.read<BattleSubscriptionBloc>();
+        final canDelete =
+            state.names.isNotEmpty || state.subscriptions.isNotEmpty;
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: canDelete
+                  ? () {
+                      bloc.add(BattleSubscriptionClearAllEvent());
+                      DefaultTabController.of(context).animateTo(0);
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
+              ),
+
+              icon: const Icon(Icons.delete_outline),
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/logo.png',
+                  height: 32,
+                  color: Colors.yellow,
+                  colorBlendMode: BlendMode.srcIn,
+                ),
+              ],
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Column(
+            children: [Expanded(child: BattleSubscriptionContainer())],
+          ),
+        );
+      },
     );
   }
 }
