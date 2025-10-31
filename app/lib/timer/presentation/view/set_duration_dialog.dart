@@ -47,7 +47,7 @@ class _SetDurationDialogState extends State<SetDurationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Set Duration'),
+      title: const Text('Quanto tempo?'),
       content: Form(
         key: _formKey,
         child: Row(
@@ -58,7 +58,7 @@ class _SetDurationDialogState extends State<SetDurationDialog> {
               child: TextFormField(
                 controller: _minController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Minutes'),
+                decoration: const InputDecoration(labelText: 'Minutos'),
                 validator: _validateNumber,
               ),
             ),
@@ -68,7 +68,7 @@ class _SetDurationDialogState extends State<SetDurationDialog> {
               child: TextFormField(
                 controller: _secController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Seconds'),
+                decoration: const InputDecoration(labelText: 'Segundos'),
                 validator: (s) {
                   final err = _validateNumber(s);
                   if (err != null) return err;
@@ -84,9 +84,9 @@ class _SetDurationDialogState extends State<SetDurationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: const Text('Cancelar'),
         ),
-        ElevatedButton(onPressed: _submit, child: const Text('Set')),
+        ElevatedButton(onPressed: _submit, child: const Text('Salvar')),
       ],
     );
   }

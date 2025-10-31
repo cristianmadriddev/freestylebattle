@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_event.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_state.dart';
+import 'package:freestylebattle/timer/timer.dart';
 
 class BattleSubscriptionContainer extends StatefulWidget {
   const BattleSubscriptionContainer({super.key});
@@ -26,11 +27,11 @@ class _BattleSubscriptionContainerState
       child: Column(
         children: [
           TabBar(
-            labelColor: colorScheme.primary, // amarelo
-            unselectedLabelColor: colorScheme.outline, // cinza suave
+            labelColor: colorScheme.primary,
+            unselectedLabelColor: colorScheme.outline,
             indicatorColor: colorScheme.primary,
             tabs: const [
-              Tab(icon: Icon(Icons.people_alt_outlined), text: 'Inscritos'),
+              Tab(icon: Icon(Icons.people_alt_outlined), text: 'Inscrições'),
               Tab(icon: Icon(Icons.sports_martial_arts), text: 'Chaveamentos'),
             ],
           ),
@@ -67,7 +68,7 @@ class _BattleSubscriptionContainerState
                       enabled: state.subscriptions.isEmpty,
                       style: TextStyle(color: colorScheme.onBackground),
                       decoration: InputDecoration(
-                        labelText: 'Digite um nome',
+                        labelText: 'Digite o Vulgo',
                         labelStyle: TextStyle(color: colorScheme.outline),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: colorScheme.outline),
@@ -86,12 +87,11 @@ class _BattleSubscriptionContainerState
                     ),
                   ),
                   const SizedBox(width: 8),
-                  ElevatedButton.icon(
+                  IconButton(
                     onPressed: state.subscriptions.isEmpty
                         ? () => _addName(bloc)
                         : null,
                     icon: const Icon(Icons.add),
-                    label: const Text('Adicionar'),
                   ),
                 ],
               ),
@@ -102,7 +102,7 @@ class _BattleSubscriptionContainerState
                   child: Center(
                     child: Text(
                       'Nenhum inscrito ainda 👀',
-                      style: TextStyle(color: colorScheme.error),
+                      style: TextStyle(color: colorScheme.error, fontSize: 24),
                     ),
                   ),
                 )
@@ -201,7 +201,7 @@ class _BattleSubscriptionContainerState
             return Center(
               child: Text(
                 'Kd as inscrições fml?!',
-                style: TextStyle(color: colorScheme.outline),
+                style: TextStyle(color: colorScheme.outline, fontSize: 24),
               ),
             );
           }
@@ -224,44 +224,48 @@ class _BattleSubscriptionContainerState
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 24),
               Expanded(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    for (int i = 2; i >= 0; i--)
-                      if (_currentBattleIndex + i < battles.length)
-                        Transform.translate(
-                          offset: Offset(0, i * 8),
-                          child: Opacity(
-                            opacity: i == 0 ? 1 : 0.5,
-                            child: Card(
-                              color: colorScheme.surface,
-                              elevation: 6 - (i * 2),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(24),
-                                child: Center(
-                                  child: Text(
-                                    '${battles[_currentBattleIndex + i].$1} 🆚 ${battles[_currentBattleIndex + i].$2}',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: colorScheme.onSurface,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Text(
+                        battles[_currentBattleIndex].$1,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 44,
+                          fontWeight: FontWeight.bold,
+
+                          color: colorScheme.onSurface,
                         ),
-                  ],
+                      ),
+                      Text(
+                        'VS',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.error,
+                        ),
+                      ),
+                      Text(
+                        battles[_currentBattleIndex].$2,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 44,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
+              TimerCard(),
+              const SizedBox(height: 44),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -274,7 +278,7 @@ class _BattleSubscriptionContainerState
                           }
                         : null,
                     icon: const Icon(Icons.navigate_before),
-                    label: const Text('Batalha Anterior'),
+                    label: const Text('Chave anterior'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
@@ -290,7 +294,7 @@ class _BattleSubscriptionContainerState
                           }
                         : null,
                     icon: const Icon(Icons.navigate_next),
-                    label: const Text('Próxima Batalha'),
+                    label: const Text('Próxima chave'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
@@ -299,6 +303,7 @@ class _BattleSubscriptionContainerState
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
             ],
           );
         },

@@ -7,13 +7,11 @@ class BattlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Assistente de Batalha')),
-      body: Column(
-        children: [
-          TimerCard(),
-          Expanded(child: BattleSubscriptionContainer()),
-        ],
+      appBar: AppBar(
+        title: Text('Grita: Hip Hop!'),
+        backgroundColor: Colors.transparent,
       ),
+      body: Column(children: [Expanded(child: BattleSubscriptionContainer())]),
     );
   }
 }

@@ -60,7 +60,7 @@ class TimerCard extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       shape: const CircleBorder(),
                     ),
-                    icon: const Icon(Icons.settings, size: 32),
+                    icon: const Icon(Icons.settings, size: 20),
                     color: Colors.grey,
                   ),
                   const SizedBox(width: 16),
@@ -88,7 +88,7 @@ class TimerCard extends StatelessWidget {
                     onPressed: !isIdleOrFinished
                         ? () => bloc.add(TimerStopped())
                         : null,
-                    icon: const Icon(Icons.stop, size: 32),
+                    icon: const Icon(Icons.stop, size: 24),
                     style: IconButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.primary,
                       side: BorderSide(
