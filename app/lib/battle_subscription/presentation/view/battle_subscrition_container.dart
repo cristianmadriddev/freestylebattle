@@ -100,40 +100,42 @@ class _BattleSubscriptionContainerState
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              battles[_currentBattleIndex].$1,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.bungeeSpice(
-                                fontSize: 44,
-                                color: colorScheme.onSurface,
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                battles[_currentBattleIndex].$1,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.bungeeSpice(
+                                  fontSize: 34,
+                                  color: colorScheme.onSurface,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'VS',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.butterflyKids(
-                                fontSize: 22,
-                                color: colorScheme.error,
+                              const SizedBox(height: 8),
+                              Text(
+                                'VS',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.butterflyKids(
+                                  fontSize: 22,
+                                  color: colorScheme.error,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              battles[_currentBattleIndex].$2,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: GoogleFonts.bungeeSpice(
-                                fontSize: 44,
-                                color: colorScheme.onSurface,
+                              const SizedBox(height: 8),
+                              Text(
+                                battles[_currentBattleIndex].$2,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                style: GoogleFonts.bungeeSpice(
+                                  fontSize: 34,
+                                  color: colorScheme.onSurface,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       IconButton(
@@ -148,7 +150,6 @@ class _BattleSubscriptionContainerState
                               : colorScheme.outline.withOpacity(0.5),
                         ),
                       ),
-                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
