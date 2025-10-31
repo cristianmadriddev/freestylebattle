@@ -40,8 +40,10 @@ class BattlePage extends StatelessWidget {
                 ),
               ],
             ),
+            actions: const [SizedBox(width: 48)],
             backgroundColor: Colors.transparent,
             elevation: 0,
+            centerTitle: true,
           ),
           body: Column(
             children: [Expanded(child: BattleSubscriptionContainer())],
