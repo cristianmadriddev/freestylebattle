@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_bloc.dart';
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_event.dart';
+import 'package:freestylebattle/beats/presentation/view/beats_container.dart';
 import 'package:freestylebattle/timer/timer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,7 +27,7 @@ class _BattleSubscriptionContainerState
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16).copyWith(top: 0),
       child: BlocBuilder<BattleSubscriptionBloc, BattleSubscriptionState>(
         builder: (context, state) {
           final bloc = context.read<BattleSubscriptionBloc>();
@@ -154,6 +155,7 @@ class _BattleSubscriptionContainerState
                   ),
                 ),
                 TimerCard(),
+                BeatsContainer(),
                 const SizedBox(height: 24),
               ],
             );

@@ -18,6 +18,10 @@ dependencies:
   path: ^1.8.3
   shared_preferences: ^2.2.2
   google_fonts: ^6.3.2
+  soundcloud_explode_dart: ^1.1.0
+  just_audio: ^0.10.5
+  webview_flutter: ^4.13.0
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
@@ -28,4 +32,5 @@ dev_dependencies:
 flutter:
   assets:
     - assets/logo.png
+    - assets/words.json
   uses-material-design: true

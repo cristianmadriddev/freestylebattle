@@ -4,11 +4,22 @@ import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_sub
 import 'package:freestylebattle/battle_subscription/presentation/bloc/battle_subscription_state.dart';
 import '../../battle.dart';
 
-class BattlePage extends StatelessWidget {
+class BattlePage extends StatefulWidget {
   const BattlePage({super.key});
 
   @override
+  State<BattlePage> createState() => _BattlePageState();
+}
+
+class _BattlePageState extends State<BattlePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return BlocBuilder<BattleSubscriptionBloc, BattleSubscriptionState>(
       builder: (_, state) {
         final bloc = context.read<BattleSubscriptionBloc>();
@@ -20,34 +31,18 @@ class BattlePage extends StatelessWidget {
               onPressed: canDelete
                   ? () {
                       bloc.add(BattleSubscriptionClearAllEvent());
-                      DefaultTabController.of(context).animateTo(0);
                     }
                   : null,
               style: ElevatedButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.error,
               ),
-
               icon: const Icon(Icons.delete_outline),
             ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/logo.png',
-                  height: 32,
-                  color: Colors.yellow,
-                  colorBlendMode: BlendMode.srcIn,
-                ),
-              ],
-            ),
-            actions: const [SizedBox(width: 48)],
             backgroundColor: Colors.transparent,
             elevation: 0,
             centerTitle: true,
           ),
-          body: Column(
-            children: [Expanded(child: BattleSubscriptionContainer())],
-          ),
+          body: BattleSubscriptionContainer(),
         );
       },
     );
