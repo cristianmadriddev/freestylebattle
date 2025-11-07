@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freestylebattle/beats/presentation/view/beats_container.dart';
 import 'package:freestylebattle/timer/presentation/view/set_duration_dialog.dart';
 import '../../domain/training_repository.dart';
 import '../bloc/training_page_bloc.dart';
@@ -172,6 +173,9 @@ class _TrainingViewState extends State<TrainingPage> {
                     const SizedBox(width: 8),
                   ],
                 ),
+
+                const SizedBox(height: 24),
+                BeatsContainer(),
                 const SizedBox(height: 24),
               ],
             );

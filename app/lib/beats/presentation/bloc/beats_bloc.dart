@@ -1,6 +1,5 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:soundcloud_explode_dart/soundcloud_explode_dart.dart';
 import '../../domain/beats_use_case.dart';
 import 'beats_event.dart';
 import 'beats_state.dart';
@@ -17,24 +16,18 @@ class BeatsBloc extends Bloc<BeatsEvent, BeatsState> {
 
   final BeatsUseCase _useCase;
   final AudioPlayer _player = AudioPlayer();
-  final SoundcloudClient _client = SoundcloudClient();
 
   Future<void> _onLoad(BeatsLoadEvent event, Emitter<BeatsState> emit) async {
     emit(state.copyWith(status: BeatsStatus.loading));
-
     try {
-      final tracks = await _useCase.call();
-      final playlistSource = ConcatenatingAudioSource(children: []);
-
-      // Build the queue with actual streaming URLs
-      for (final track in tracks) {
-        final streamUrl = await _client.tracks.getStreams(track.id);
-        playlistSource.add(AudioSource.uri(Uri.parse(streamUrl.toString())));
-      }
-
-      await _player.setAudioSource(playlistSource);
-
-      emit(state.copyWith(status: BeatsStatus.paused, tracks: tracks));
+      final sources = await _useCase.call();
+      emit(
+        state.copyWith(
+          status: BeatsStatus.paused,
+          sources: sources,
+          currentIndex: 0,
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(status: BeatsStatus.error, errorMessage: e.toString()),
@@ -43,9 +36,10 @@ class BeatsBloc extends Bloc<BeatsEvent, BeatsState> {
   }
 
   Future<void> _onPlay(BeatsPlayEvent event, Emitter<BeatsState> emit) async {
-    if (state.tracks.isEmpty) return;
+    final source = event.source ?? state.currentTrack;
+    if (source == null) return;
 
-    await _player.play();
+    await _player.play(source);
     emit(state.copyWith(status: BeatsStatus.playing));
   }
 
@@ -60,14 +54,27 @@ class BeatsBloc extends Bloc<BeatsEvent, BeatsState> {
   }
 
   Future<void> _onNext(BeatsNextEvent event, Emitter<BeatsState> emit) async {
-    await _player.seekToNext();
+    if (state.sources.isEmpty) return;
+
+    final nextIndex = (state.currentIndex + 1) % state.sources.length;
+    final nextTrack = state.sources[nextIndex];
+
+    await _player.play(nextTrack);
+    emit(state.copyWith(currentIndex: nextIndex, status: BeatsStatus.playing));
   }
 
   Future<void> _onPrevious(
     BeatsPreviousEvent event,
     Emitter<BeatsState> emit,
   ) async {
-    await _player.seekToPrevious();
+    if (state.sources.isEmpty) return;
+
+    final prevIndex =
+        (state.currentIndex - 1 + state.sources.length) % state.sources.length;
+    final prevTrack = state.sources[prevIndex];
+
+    await _player.play(prevTrack);
+    emit(state.copyWith(currentIndex: prevIndex, status: BeatsStatus.playing));
   }
 
   @override

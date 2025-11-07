@@ -1,52 +1,27 @@
-import 'package:http/http.dart' as http;
-import 'package:soundcloud_explode_dart/soundcloud_explode_dart.dart';
+import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 
 abstract class BeatsUseCase {
-  Future<List<Track>> call();
+  Future<List<AssetSource>> call();
 }
 
-/// Um cliente HTTP que adiciona um User-Agent customizado em cada requisição.
-class HttpClientWithHeader extends http.BaseClient {
-  final http.Client _inner = http.Client();
+final class BeatsFromLocalAssetsUseCase extends BeatsUseCase {
+  BeatsFromLocalAssetsUseCase({this.shuffle = true});
+
+  /// Define se a lista deve ser embaralhada
+  final bool shuffle;
 
   @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
-    request.headers['User-Agent'] =
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-        '(KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36';
-    return _inner.send(request);
-  }
+  Future<List<AssetSource>> call() async {
+    final beats = List.generate(
+      10,
+      (i) => AssetSource('beats/beat${i + 1}.mp3'),
+    );
 
-  @override
-  void close() {
-    _inner.close();
-  }
-}
-
-final class BeatsFromSoundCloudUseCase extends BeatsUseCase {
-  BeatsFromSoundCloudUseCase({required this.url});
-  final String url;
-
-  @override
-  Future<List<Track>> call() async {
-    final client = SoundcloudClient(httpClient: HttpClientWithHeader());
-    final tracks = <Track>[];
-
-    try {
-      print("Fetching playlist from $url");
-      final playlist = await client.playlists.getByUrl(url);
-
-      await for (final batch in client.playlists.getTracks(playlist.id)) {
-        tracks.addAll(batch);
-      }
-    } catch (e, s) {
-      print("Error: $e");
-      print(s);
-    } finally {
-      client.users; // apenas pra garantir que o client não é tree-shaken
+    if (shuffle) {
+      beats.shuffle(Random());
     }
 
-    print("Total tracks fetched: ${tracks.length}");
-    return tracks;
+    return beats;
   }
 }

@@ -55,11 +55,7 @@ class MyApp extends StatelessWidget {
             )..add(TrainingLevelSelectedEvent(TrainingLevel.facil)),
           ),
           BlocProvider<BeatsBloc>.value(
-            value: BeatsBloc(
-              BeatsFromSoundCloudUseCase(
-                url: 'https://soundcloud.com/globeats/sets/freestyle-rap-beats',
-              ),
-            ),
+            value: BeatsBloc(BeatsFromLocalAssetsUseCase()),
           ),
           BlocProvider<BattleSubscriptionBloc>.value(
             value: BattleSubscriptionBloc(),

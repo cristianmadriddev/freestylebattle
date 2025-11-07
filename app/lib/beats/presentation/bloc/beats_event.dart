@@ -1,5 +1,5 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:equatable/equatable.dart';
-import 'package:soundcloud_explode_dart/soundcloud_explode_dart.dart';
 
 abstract class BeatsEvent extends Equatable {
   const BeatsEvent();
@@ -10,8 +10,10 @@ abstract class BeatsEvent extends Equatable {
 final class BeatsLoadEvent extends BeatsEvent {}
 
 final class BeatsPlayEvent extends BeatsEvent {
-  const BeatsPlayEvent(this.track);
-  final Track track;
+  const BeatsPlayEvent([this.source]);
+  final AssetSource? source;
+  @override
+  List<Object?> get props => [source];
 }
 
 final class BeatsPauseEvent extends BeatsEvent {}
