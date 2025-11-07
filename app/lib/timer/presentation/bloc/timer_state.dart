@@ -14,8 +14,8 @@ class TimerState extends Equatable {
   });
 
   factory TimerState.initial() => const TimerState(
-    initial: Duration(seconds: 45),
-    remaining: Duration(seconds: 45),
+    initial: Duration(seconds: 20),
+    remaining: Duration(seconds: 20),
     status: TimerStatus.idle,
   );
 

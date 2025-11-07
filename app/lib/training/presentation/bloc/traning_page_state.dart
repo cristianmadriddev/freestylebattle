@@ -26,8 +26,8 @@ class TrainingState {
       isRunning = false,
       isPaused = false,
       isLoading = false,
-      duration = const Duration(seconds: 45),
-      remainingSeconds = 45,
+      duration = const Duration(seconds: 20),
+      remainingSeconds = 20,
       level = TrainingLevel.facil,
       error = null;
 

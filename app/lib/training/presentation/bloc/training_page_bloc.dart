@@ -15,8 +15,8 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
   bool _isPaused = false;
   final Random _random = Random();
 
-  Duration _duration = const Duration(seconds: 45);
-  Duration _remaining = const Duration(seconds: 45);
+  Duration _duration = const Duration(seconds: 20);
+  Duration _remaining = const Duration(seconds: 20);
 
   TrainingBloc(this._trainingWordsUseCase)
     : super(const TrainingState.initial()) {

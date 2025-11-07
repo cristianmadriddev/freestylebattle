@@ -15,7 +15,7 @@ class TrainingPage extends StatefulWidget {
 
 class _TrainingViewState extends State<TrainingPage> {
   TrainingLevel selectedLevel = TrainingLevel.facil;
-  Duration currentDuration = const Duration(seconds: 45);
+  Duration currentDuration = const Duration(seconds: 20);
 
   String _formatDuration(int seconds) {
     final d = Duration(seconds: seconds);
