@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freestylebattle/beats/domain/beats_use_case.dart';
-import 'package:freestylebattle/training/data/local_json_training_repository.dart';
-import 'package:freestylebattle/training/domain/get_training_words_use_case.dart';
-import 'package:freestylebattle/training/domain/training_repository.dart';
-import 'package:freestylebattle/training/presentation/bloc/training_page_bloc.dart';
 
-import 'beats/presentation/bloc/beats_bloc.dart';
-import 'home/presentation/home_page.dart';
+import 'beats/beats.dart';
+import 'home/home.dart';
 import 'timer/timer.dart';
 import 'battle_subscription/battle_subscription.dart';
-import 'training/presentation/bloc/training_page_event.dart';
+import 'training_list/data/local_json_training_repository.dart';
+import 'training_list/domain/get_training_words_use_case.dart';
+import 'training_list/presentation/bloc/training_list_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,10 +46,11 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider<TimerBloc>.value(value: TimerBloc()),
-          BlocProvider<TrainingBloc>.value(
-            value: TrainingBloc(
-              GetTrainingWordsUseCaseImpl(TrainingRepositoryImpl()),
-            )..add(TrainingLevelSelectedEvent(TrainingLevel.facil)),
+
+          BlocProvider<TrainingListBloc>.value(
+            value: TrainingListBloc(
+              GetTrainingCategoriesUseCaseImpl(TrainingRepositoryImpl()),
+            ),
           ),
           BlocProvider<BeatsBloc>.value(
             value: BeatsBloc(BeatsFromLocalAssetsUseCase()),

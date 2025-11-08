@@ -20,7 +20,7 @@ class BeatsBloc extends Bloc<BeatsEvent, BeatsState> {
   Future<void> _onLoad(BeatsLoadEvent event, Emitter<BeatsState> emit) async {
     emit(state.copyWith(status: BeatsStatus.loading));
     try {
-      final sources = await _useCase.call();
+      final sources = _useCase.call();
       emit(
         state.copyWith(
           status: BeatsStatus.paused,

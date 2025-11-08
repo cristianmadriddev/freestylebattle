@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 
 abstract class BeatsUseCase {
-  Future<List<AssetSource>> call();
+  List<AssetSource> call();
 }
 
 final class BeatsFromLocalAssetsUseCase extends BeatsUseCase {
@@ -12,7 +12,7 @@ final class BeatsFromLocalAssetsUseCase extends BeatsUseCase {
   final bool shuffle;
 
   @override
-  Future<List<AssetSource>> call() async {
+  List<AssetSource> call() {
     final beats = List.generate(
       10,
       (i) => AssetSource('beats/beat${i + 1}.mp3'),

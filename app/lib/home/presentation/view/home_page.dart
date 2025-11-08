@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freestylebattle/battle/battle.dart';
-import 'package:freestylebattle/training/presentation/view/training_page.dart';
+
+import '../../../training_list/presentation/view/training_list_page.dart';
 
 class HomeTabs extends StatefulWidget {
   const HomeTabs({super.key});
@@ -58,7 +59,7 @@ class _HomeTabsState extends State<HomeTabs>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [const BattlePage(), TrainingPage()],
+        children: [const BattlePage(), TrainingListPage()],
       ),
     );
   }
