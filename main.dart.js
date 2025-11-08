@@ -82461,14 +82461,14 @@ l(){var s=this.d
 s===$&&A.a()
 s.l()
 this.a0Y()},
-O(a){var s,r,q,p=null,o=this.d
-o===$&&A.a()
-s=o.d
-r=s===0?A.W(a).ax.b:B.cg
-r=A.azl(new A.tr(A.aK5(p,p,new A.xa("assets/logo.png",p,p)),32,r,B.Ai,p),"Batalha")
-q=t.p
-r=A.c([r,A.azl(A.oS(B.Hi,s===1?A.W(a).ax.b:B.cg,p,p),"Treinar")],q)
-return A.MI(p,new A.BY(this.d,A.c([B.Ab,new A.Cy(p)],q),p),new A.BX(r,o,p))}}
+O(a){var s,r,q,p,o=null,n=this.d
+n===$&&A.a()
+s=n.d
+r=A.azl(A.oS(B.Hi,s===1?A.W(a).ax.b:B.cg,o,o),"Treinar")
+q=s===0?A.W(a).ax.b:B.cg
+p=t.p
+q=A.c([r,A.azl(new A.tr(A.aK5(o,o,new A.xa("assets/logo.png",o,o)),32,q,B.Ai,o),"Batalha")],p)
+return A.MI(o,new A.BY(this.d,A.c([new A.Cy(o),B.Ab],p),o),new A.BX(q,n,o))}}
 A.akS.prototype={
 $0(){return this.a.al(new A.akR())},
 $S:0}
