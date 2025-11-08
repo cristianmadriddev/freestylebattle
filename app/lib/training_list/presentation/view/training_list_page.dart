@@ -32,7 +32,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
         builder: (context, state) {
           if (state is TrainingListLoaded) {
             return Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               child: Wrap(
                 children: state.categories.map((category) {
                   final color = Colors
@@ -42,7 +42,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                   return Container(
                     padding: const EdgeInsets.all(4),
                     height: 120,
-                    width: 180,
+                    width: 175,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(4),
                       onTap: () {
@@ -62,7 +62,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
                         duration: const Duration(milliseconds: 200),
                         decoration: BoxDecoration(
                           color: color.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(4),
                           boxShadow: [
                             BoxShadow(
                               color: color.withOpacity(0.4),
