@@ -44,7 +44,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
     _beatPaths = beatsUseCase();
     _beatPaths.shuffle(Random());
     _currentBeatIndex = 0;
-    _totalRounds = category.words.length ~/ 4;
+    _totalRounds = category.words.length ~/ 3;
 
     final messages = [
       const TrainingCountdown(countdown: 3, message: "🎤 RIMAS EM 3..."),
@@ -83,7 +83,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
 
     if (available.isEmpty) _usedWords.clear();
 
-    final words = available.take(4).toList();
+    final words = available.take(3).toList();
     _usedWords.addAll(words);
 
     if (emit.isDone) return;
