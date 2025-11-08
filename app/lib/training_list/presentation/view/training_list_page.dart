@@ -31,71 +31,70 @@ class _TrainingListPageState extends State<TrainingListPage> {
       body: BlocBuilder<TrainingListBloc, TrainingListState>(
         builder: (context, state) {
           if (state is TrainingListLoaded) {
-            return GridView.builder(
+            return Padding(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.4,
-              ),
-              itemCount: state.categories.length,
-              itemBuilder: (context, index) {
-                final category = state.categories[index];
-                final color = Colors
-                    .primaries[random.nextInt(Colors.primaries.length)]
-                    .shade400;
+              child: Wrap(
+                children: state.categories.map((category) {
+                  final color = Colors
+                      .primaries[random.nextInt(Colors.primaries.length)]
+                      .shade400;
 
-                return InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (_) => TrainingBloc(
-                            beatsUseCase: BeatsFromLocalAssetsUseCase(),
-                            category: category,
+                  return Container(
+                    padding: const EdgeInsets.all(4),
+                    height: 120,
+                    width: 180,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(4),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider(
+                              create: (_) => TrainingBloc(
+                                beatsUseCase: BeatsFromLocalAssetsUseCase(),
+                                category: category,
+                              ),
+                              child: TrainingPage(category: category),
+                            ),
                           ),
-                          child: TrainingPage(category: category),
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: color.withOpacity(0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-                      ),
-                    );
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: color.withOpacity(0.4),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      child: Center(
-                        child: Text(
-                          category.title,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          child: Center(
+                            child: Text(
+                              category.title,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                }).toList(),
+              ),
             );
           }
 
