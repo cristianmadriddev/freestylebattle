@@ -46,6 +46,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
     _currentBeatIndex = 0;
     _totalRounds = category.words.length ~/ 3;
 
+    await _startBeatPlayback();
     final messages = [
       const TrainingCountdown(countdown: 3, message: "🎤 RIMAS EM 3..."),
       const TrainingCountdown(countdown: 2, message: "🎤 RIMAS EM 2..."),
@@ -59,7 +60,6 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
       await Future.delayed(const Duration(seconds: 1));
     }
 
-    await _startBeatPlayback();
     if (!emit.isDone) add(const TrainingNextRoundEvent());
   }
 
@@ -130,7 +130,6 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
 
   Future<void> _startBeatPlayback() async {
     if (_beatPaths.isEmpty) return;
-
     await _player.play(_beatPaths[_currentBeatIndex]);
     _player.onPlayerComplete.listen((_) async {
       _currentBeatIndex = (_currentBeatIndex + 1) % _beatPaths.length;
