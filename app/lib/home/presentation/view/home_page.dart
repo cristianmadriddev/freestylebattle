@@ -36,6 +36,15 @@ class _HomeTabsState extends State<HomeTabs>
         controller: _tabController,
         tabs: [
           Tab(
+            icon: Icon(
+              Icons.psychology_sharp,
+              color: selectedIndex == 1
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
+            ),
+            text: 'Treinar',
+          ),
+          Tab(
             icon: Image.asset(
               'assets/logo.png',
               height: 32,
@@ -46,20 +55,11 @@ class _HomeTabsState extends State<HomeTabs>
             ),
             text: 'Batalha',
           ),
-          Tab(
-            icon: Icon(
-              Icons.psychology_sharp,
-              color: selectedIndex == 1
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.grey,
-            ),
-            text: 'Treinar',
-          ),
         ],
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [const BattlePage(), TrainingListPage()],
+        children: [TrainingListPage(), const BattlePage()],
       ),
     );
   }
