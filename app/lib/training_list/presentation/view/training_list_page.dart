@@ -27,7 +27,7 @@ class _TrainingListPageState extends State<TrainingListPage> {
     final random = Random();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Treinos de Rima'), centerTitle: true),
+      appBar: AppBar(centerTitle: true),
       body: BlocBuilder<TrainingListBloc, TrainingListState>(
         builder: (context, state) {
           if (state is TrainingListLoaded) {

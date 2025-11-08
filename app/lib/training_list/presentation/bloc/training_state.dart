@@ -24,7 +24,7 @@ class TrainingRunning extends TrainingState {
   final List<String> words;
   final int remainingSeconds;
   final String formattedTime;
-  final int round;
+  final String round;
 
   const TrainingRunning({
     required this.words,

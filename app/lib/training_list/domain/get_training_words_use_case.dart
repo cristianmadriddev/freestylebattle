@@ -10,5 +10,15 @@ class GetTrainingCategoriesUseCaseImpl extends GetTrainingCategoriesUseCase {
   GetTrainingCategoriesUseCaseImpl(this.repository);
 
   @override
-  Future<List<TrainingCategory>> call() => repository.getTrainingCategories();
+  Future<List<TrainingCategory>> call() async {
+    final categories = await repository.getTrainingCategories();
+    return [
+      TrainingCategory(
+        key: "mix",
+        title: "Mix",
+        words: categories.expand((c) => c.words).toList(),
+      ),
+      ...categories,
+    ];
+  }
 }

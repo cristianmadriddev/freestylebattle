@@ -119,7 +119,7 @@ class _TrainingPageState extends State<TrainingPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Rodada ${state.round}/10",
+                  "Rodada ${state.round}",
                   style: const TextStyle(fontSize: 18, color: Colors.grey),
                 ),
                 const SizedBox(height: 12),

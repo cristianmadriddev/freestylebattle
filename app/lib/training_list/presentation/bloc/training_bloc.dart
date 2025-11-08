@@ -15,7 +15,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
   int _currentBeatIndex = 0;
 
   final TrainingCategory category;
-  final int totalRounds = 10;
+  int _totalRounds = 10;
   int _round = 0;
   Duration _roundDuration = const Duration(seconds: 20);
   final Set<String> _usedWords = {};
@@ -44,6 +44,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
     _beatPaths = beatsUseCase();
     _beatPaths.shuffle(Random());
     _currentBeatIndex = 0;
+    _totalRounds = category.words.length ~/ 4;
 
     final messages = [
       const TrainingCountdown(countdown: 3, message: "🎤 RIMAS EM 3..."),
@@ -66,7 +67,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
     TrainingNextRoundEvent event,
     Emitter<TrainingState> emit,
   ) async {
-    if (_round >= totalRounds) {
+    if (_round >= _totalRounds) {
       if (!emit.isDone) emit(const TrainingFinished());
       await _player.stop();
       return;
@@ -91,7 +92,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
         words: words,
         remainingSeconds: remaining,
         formattedTime: _formatDuration(remaining),
-        round: _round,
+        round: '$_round/$_totalRounds',
       ),
     );
 
@@ -122,7 +123,7 @@ class TrainingBloc extends Bloc<TrainingEvent, TrainingState> {
         words: event.words,
         remainingSeconds: event.remaining,
         formattedTime: _formatDuration(event.remaining),
-        round: event.round,
+        round: '${event.round}/$_totalRounds',
       ),
     );
   }
